@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Workflows Guide</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3350;
+      --accent: #6c63ff;
+      --accent2: #ff6584;
+      --accent3: #43e97b;
+      --accent4: #f7971e;
+      --accent5: #38f9d7;
+      --text: #e8eaf6;
+      --muted: #8892b0;
+      --white: #ffffff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+    }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, #1a1d27 0%, #0f1117 50%, #1a1d27 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 60px 24px 48px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -80px; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 300px;
+      background: radial-gradient(ellipse, rgba(108,99,255,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(108,99,255,0.15);
+      border: 1px solid rgba(108,99,255,0.4);
+      color: #a79fff;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+      background: linear-gradient(90deg, #fff 0%, #a79fff 60%, #6c63ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      color: var(--muted);
+      font-size: 1.1rem;
+      max-width: 560px;
+      margin: 0 auto 32px;
+    }
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat-num {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* Nav */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(15,17,23,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .nav::-webkit-scrollbar { display: none; }
+    .nav-item {
+      flex-shrink: 0;
+      padding: 14px 16px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .nav-item:hover { color: var(--white); }
+    .nav-item.active { color: var(--white); border-bottom-color: var(--accent); }
+
+    /* Main layout */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    /* Section */
+    .section {
+      display: none;
+    }
+    .section.active {
+      display: block;
+    }
+
+    /* Section header */
+    .section-header {
+      margin-bottom: 32px;
+    }
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .section-desc {
+      color: var(--muted);
+      font-size: 0.95rem;
+      max-width: 640px;
+    }
+
+    /* Workflow cards */
+    .workflow-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    .workflow-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .workflow-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .card-name {
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 3px;
+    }
+    .card-subtitle {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    /* Flow steps */
+    .flow {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .flow-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 8px 0;
+      position: relative;
+    }
+    .flow-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 11px;
+      top: 28px;
+      width: 2px;
+      height: calc(100% - 8px);
+      background: var(--border);
+    }
+    .step-dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 2px;
+      background: var(--surface);
+      z-index: 1;
+    }
+    .step-text {
+      font-size: 0.85rem;
+      color: var(--text);
+      padding-top: 2px;
+    }
+    .step-text strong {
+      color: var(--white);
+    }
+    .tip {
+      background: rgba(108,99,255,0.08);
+      border: 1px solid rgba(108,99,255,0.2);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.82rem;
+      color: #a79fff;
+      margin-top: 14px;
+    }
+    .tip::before { content: '💡 '; }
+
+    /* Colors per category */
+    .color-speed    { --c: #38f9d7; }
+    .color-serious  { --c: #6c63ff; }
+    .color-fun      { --c: #ff6584; }
+    .color-niche    { --c: #f7971e; }
+    .color-tools    { --c: #43e97b; }
+    .color-content  { --c: #a29bfe; }
+    .color-detox    { --c: #fd79a8; }
+
+    .workflow-card.color-speed    { border-top: 3px solid #38f9d7; }
+    .workflow-card.color-serious  { border-top: 3px solid #6c63ff; }
+    .workflow-card.color-fun      { border-top: 3px solid #ff6584; }
+    .workflow-card.color-niche    { border-top: 3px solid #f7971e; }
+    .workflow-card.color-tools    { border-top: 3px solid #43e97b; }
+    .workflow-card.color-content  { border-top: 3px solid #a29bfe; }
+    .workflow-card.color-detox    { border-top: 3px solid #fd79a8; }
+
+    .tag-speed    { background: rgba(56,249,215,0.12);  color: #38f9d7; }
+    .tag-serious  { background: rgba(108,99,255,0.12);  color: #a79fff; }
+    .tag-fun      { background: rgba(255,101,132,0.12); color: #ff6584; }
+    .tag-niche    { background: rgba(247,151,30,0.12);  color: #f7971e; }
+    .tag-tools    { background: rgba(67,233,123,0.12);  color: #43e97b; }
+    .tag-content  { background: rgba(162,155,254,0.12); color: #a29bfe; }
+    .tag-detox    { background: rgba(253,121,168,0.12); color: #fd79a8; }
+
+    .dot-speed   { border-color: #38f9d7; color: #38f9d7; }
+    .dot-serious { border-color: #6c63ff; color: #a79fff; }
+    .dot-fun     { border-color: #ff6584; color: #ff6584; }
+    .dot-niche   { border-color: #f7971e; color: #f7971e; }
+    .dot-tools   { border-color: #43e97b; color: #43e97b; }
+    .dot-content { border-color: #a29bfe; color: #a29bfe; }
+    .dot-detox   { border-color: #fd79a8; color: #fd79a8; }
+
+    .icon-bg-speed   { background: rgba(56,249,215,0.12); }
+    .icon-bg-serious { background: rgba(108,99,255,0.12); }
+    .icon-bg-fun     { background: rgba(255,101,132,0.12); }
+    .icon-bg-niche   { background: rgba(247,151,30,0.12); }
+    .icon-bg-tools   { background: rgba(67,233,123,0.12); }
+    .icon-bg-content { background: rgba(162,155,254,0.12); }
+    .icon-bg-detox   { background: rgba(253,121,168,0.12); }
+
+    /* Naming convention box */
+    .naming-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .naming-box h3 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+    .naming-example {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+    .name-part {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+    .np-date   { background: rgba(56,249,215,0.12);  color: #38f9d7; }
+    .np-role   { background: rgba(108,99,255,0.12);  color: #a79fff; }
+    .np-topic  { background: rgba(247,151,30,0.12);  color: #f7971e; }
+    .np-plus   { color: var(--muted); font-size: 1.1rem; }
+
+    /* Drive box */
+    .drive-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      margin-top: 16px;
+      font-size: 0.85rem;
+    }
+    .drive-box .icon { font-size: 1.5rem; flex-shrink: 0; }
+    .drive-box strong { display: block; margin-bottom: 4px; }
+    .drive-box p { color: var(--muted); margin: 0; }
+
+    /* Principles */
+    .principles {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .principle {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px;
+    }
+    .principle-icon { font-size: 1.6rem; margin-bottom: 10px; }
+    .principle h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 6px; }
+    .principle p { font-size: 0.82rem; color: var(--muted); }
+
+    /* Overview table */
+    .overview-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+    .overview-table th {
+      text-align: left;
+      padding: 10px 14px;
+      background: var(--surface2);
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-bottom: 1px solid var(--border);
+    }
+    .overview-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .overview-table tr:hover td { background: var(--surface); }
+    .overview-table tr:last-child td { border-bottom: none; }
+    .badge {
+      display: inline-block;
+      padding: 2px 9px;
+      border-radius: 4px;
+      font-size: 0.73rem;
+      font-weight: 600;
+    }
+
+    /* Callout */
+    .callout {
+      background: var(--surface2);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      font-size: 0.88rem;
+      margin: 20px 0;
+      color: var(--text);
+    }
+    .callout strong { color: var(--white); }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .workflow-grid { grid-template-columns: 1fr; }
+      .hero-stats { gap: 20px; }
+      .nav-item { padding: 12px 10px; font-size: 0.75rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">Student AI Guide</div>
+  <h1>Master Your AI Workflows</h1>
+  <p>A practical guide to using the right AI tool for the right task — from quick lookups to deep research and content creation.</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">7</div><div class="stat-label">Categories</div></div>
+    <div class="stat"><div class="stat-num">20+</div><div class="stat-label">Workflows</div></div>
+    <div class="stat"><div class="stat-num">10+</div><div class="stat-label">AI Tools</div></div>
+    <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Possibilities</div></div>
+  </div>
+</section>
+
+<!-- NAV -->
+<nav class="nav">
+  <a class="nav-item active" onclick="showSection('overview', this)">Overview</a>
+  <a class="nav-item" onclick="showSection('speed', this)">⚡ Speed</a>
+  <a class="nav-item" onclick="showSection('serious', this)">🧠 Serious Work</a>
+  <a class="nav-item" onclick="showSection('fun', this)">🎉 Fun Work</a>
+  <a class="nav-item" onclick="showSection('niche', this)">🔬 Niche Use Cases</a>
+  <a class="nav-item" onclick="showSection('tools', this)">🛠 Tools</a>
+  <a class="nav-item" onclick="showSection('content', this)">🎨 Content Creation</a>
+  <a class="nav-item" onclick="showSection('detox', this)">🌿 Digital Detox</a>
+</nav>
+
+<div class="container">
+
+  <!-- OVERVIEW -->
+  <section id="overview" class="section active">
+    <div class="section-header">
+      <div class="section-tag tag-serious">Getting Started</div>
+      <h2 class="section-title">How AI Workflows Work</h2>
+      <p class="section-desc">Each workflow is a repeatable system: choose the right tool, use the right prompting style, label your chats consistently, and save the outputs that matter.</p>
+    </div>
+
+    <div class="principles">
+      <div class="principle">
+        <div class="principle-icon">🎯</div>
+        <h4>Right Tool for the Job</h4>
+        <p>Different AI models excel at different things. Match the task to the tool — speed, depth, creativity, or fun.</p>
+      </div>
+      <div class="principle">
+        <div class="principle-icon">🏷️</div>
+        <h4>Label Everything</h4>
+        <p>Use the format <strong>(Date) (Role) (Topic)</strong> for every chat so you can find it again later.</p>
+      </div>
+      <div class="principle">
+        <div class="principle-icon">💾</div>
+        <h4>Save What Matters</h4>
+        <p>Move useful outputs to Google Drive with labeled folders per AI tool. Public links let you share work instantly.</p>
+      </div>
+      <div class="principle">
+        <div class="principle-icon">🔁</div>
+        <h4>Casual Prompting</h4>
+        <p>You don't need perfect prompts for most tasks. Talk to AI like a smart friend — be direct and conversational.</p>
+      </div>
+      <div class="principle">
+        <div class="principle-icon">⬆️</div>
+        <h4>Prompt Stacking</h4>
+        <p>For complex work, use one AI to generate an optimized prompt, then feed it to a more powerful model.</p>
+      </div>
+      <div class="principle">
+        <div class="principle-icon">🧘</div>
+        <h4>Balance Screen Time</h4>
+        <p>Build in regular Digital Detox breaks to reset mentally, spiritually, and physically.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:32px;">
+      <h3 style="font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:16px;">Chat Naming Convention</h3>
+      <div class="naming-box">
+        <h3>Standard Format</h3>
+        <div class="naming-example">
+          <span class="name-part np-date">2026-03-13</span>
+          <span class="np-plus">+</span>
+          <span class="name-part np-role">Smart Friend</span>
+          <span class="np-plus">+</span>
+          <span class="name-part np-topic">Biology Study Guide</span>
+        </div>
+        <p style="font-size:0.82rem;color:var(--muted);margin-top:8px;">Each part tells you <em>when</em> you made it, <em>which AI persona</em> you used, and <em>what it was about</em>. Makes searching your history effortless.</p>
+      </div>
+      <div class="naming-box" style="margin-top:16px;">
+        <h3>Role Labels by Model</h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;font-size:0.83rem;">
+          <div><span style="color:#a79fff;font-weight:600;">Smart Friend</span> — Claude Sonnet 4.6</div>
+          <div><span style="color:#a79fff;font-weight:600;">Creative Genius</span> — Claude Opus 4.6</div>
+          <div><span style="color:#a79fff;font-weight:600;">Claude Code</span> — Claude Code</div>
+          <div><span style="color:#f7971e;font-weight:600;">Personal Assistant</span> — ChatGPT 5.4 Thinking</div>
+          <div><span style="color:#f7971e;font-weight:600;">Digital Clone</span> — BrendanGPT</div>
+          <div><span style="color:#f7971e;font-weight:600;">OG Connectors</span> — ChatGPT + Connectors</div>
+          <div><span style="color:#43e97b;font-weight:600;">Expert</span> — Gemini 3.1 Pro</div>
+          <div><span style="color:#43e97b;font-weight:600;">Deep Research</span> — Gemini Deep Research</div>
+          <div><span style="color:#43e97b;font-weight:600;">Chrome</span> — Gemini in Chrome</div>
+          <div><span style="color:#43e97b;font-weight:600;">Google Maps</span> — Google Maps Gemini</div>
+          <div><span style="color:#43e97b;font-weight:600;">Gems Brainstormer</span> — Gemini Gems</div>
+          <div><span style="color:#43e97b;font-weight:600;">Gems Storybook</span> — Gemini Gems</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:32px;">
+      <h3 style="font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:16px;">Quick Reference — All Workflows</h3>
+      <div style="overflow-x:auto;border-radius:10px;border:1px solid var(--border);">
+        <table class="overview-table">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Tool</th>
+              <th>Best For</th>
+              <th>Label</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="badge tag-speed">Speed</span></td><td>Perplexity</td><td>Quick research with citations</td><td>(Date) Perplexity (Topic)</td></tr>
+            <tr><td><span class="badge tag-speed">Speed</span></td><td>ChatGPT Auto</td><td>Fast casual Q&amp;A</td><td>(Date) (Topic)</td></tr>
+            <tr><td><span class="badge tag-speed">Speed</span></td><td>Google AI Mode</td><td>Search + AI hybrid</td><td>(Date) Google AI Mode (Topic)</td></tr>
+            <tr><td><span class="badge tag-serious">Serious</span></td><td>Claude Sonnet 4.6</td><td>Smart analysis, writing, coding</td><td>(Date) Smart Friend (Topic)</td></tr>
+            <tr><td><span class="badge tag-serious">Serious</span></td><td>ChatGPT 5.4 Thinking</td><td>Agent tasks, deep research</td><td>(Date) Personal Assistant (Topic)</td></tr>
+            <tr><td><span class="badge tag-serious">Serious</span></td><td>Gemini 3.1 Pro</td><td>Expert-level responses</td><td>(Date) Expert (Topic)</td></tr>
+            <tr><td><span class="badge tag-fun">Fun</span></td><td>BrendanGPT</td><td>Custom AI personality / voice</td><td>(Date) Digital Clone (Topic)</td></tr>
+            <tr><td><span class="badge tag-fun">Fun</span></td><td>ChatGPT + Connectors</td><td>DoorDash, Uber, Expedia, Spotify</td><td>(Date) OG Connectors (Topic)</td></tr>
+            <tr><td><span class="badge tag-fun">Fun</span></td><td>Gemini Gems Brainstormer</td><td>Idea generation sessions</td><td>(Date) Gems Brainstormer (Topic)</td></tr>
+            <tr><td><span class="badge tag-niche">Niche</span></td><td>Voice Memos + BrendanGPT</td><td>Transcribe &amp; analyze conversations</td><td>(Topic) (Date)</td></tr>
+            <tr><td><span class="badge tag-niche">Niche</span></td><td>OpenEvidence</td><td>Medical research with citations</td><td>—</td></tr>
+            <tr><td><span class="badge tag-niche">Niche</span></td><td>ElevenLabs</td><td>Custom voice text-to-speech</td><td>(Date) in ElevenLabs folder</td></tr>
+            <tr><td><span class="badge tag-tools">Tools</span></td><td>Gemini in Chrome</td><td>Summarize any webpage</td><td>(Date) Chrome (Topic)</td></tr>
+            <tr><td><span class="badge tag-tools">Tools</span></td><td>Google Maps Gemini</td><td>Voice AI while navigating</td><td>(Date) Google Maps (Topic)</td></tr>
+            <tr><td><span class="badge tag-tools">Tools</span></td><td>Google Slides/Sheets</td><td>Beautify slides, chart data</td><td>—</td></tr>
+            <tr><td><span class="badge tag-content">Content</span></td><td>Sora</td><td>AI video generation</td><td>AI Generated Videos album</td></tr>
+            <tr><td><span class="badge tag-content">Content</span></td><td>Perplexity Deep Research</td><td>Long-form research reports</td><td>(Date) (Topic) — shareable</td></tr>
+            <tr><td><span class="badge tag-content">Content</span></td><td>Claude Opus 4.6</td><td>High-quality creative writing</td><td>(Date) Creative Genius (Topic)</td></tr>
+            <tr><td><span class="badge tag-content">Content</span></td><td>Gemini Deep Research</td><td>Comprehensive research reports</td><td>(Date) Deep Research (Topic)</td></tr>
+            <tr><td><span class="badge tag-content">Content</span></td><td>Gemini Lyria Music</td><td>AI music generation</td><td>(Date) Music (Topic)</td></tr>
+            <tr><td><span class="badge tag-content">Content</span></td><td>Gemini Gems Storybook</td><td>Creative storytelling</td><td>(Date) Gems Storybook (Topic)</td></tr>
+            <tr><td><span class="badge tag-content">Content</span></td><td>Claude Code</td><td>Build &amp; deploy web projects</td><td>(Date) Claude Code (Topic)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="drive-box" style="margin-top:24px;">
+      <div class="icon">📁</div>
+      <div>
+        <strong>Google Drive File Organization</strong>
+        <p>Create folders: <strong>Claude/</strong>, <strong>Gemini/</strong>, <strong>Perplexity/</strong> — label artifacts with the matching AI name. For shareable content, click <em>Manage Access → Anyone with the link</em>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SPEED -->
+  <section id="speed" class="section">
+    <div class="section-header">
+      <div class="section-tag tag-speed">⚡ Speed</div>
+      <h2 class="section-title">Quick Workflows</h2>
+      <p class="section-desc">When you need a fast answer, a quick draft, or a simple lookup. These tools prioritize speed over depth.</p>
+    </div>
+    <div class="workflow-grid">
+
+      <div class="workflow-card color-speed">
+        <div class="card-header">
+          <div class="card-icon icon-bg-speed">🔍</div>
+          <div>
+            <div class="card-name">Perplexity</div>
+            <div class="card-subtitle">Research with citations</div>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="flow-step"><div class="step-dot dot-speed">1</div><div class="step-text">Open <strong>Perplexity</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-speed">2</div><div class="step-text"><strong>Casual Prompting</strong> — ask anything naturally</div></div>
+          <div class="flow-step"><div class="step-dot dot-speed">3</div><div class="step-text">If applicable, <strong>Create Files And Apps</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-speed">4</div><div class="step-text"><strong>Save useful artifacts</strong> to Google Drive</div></div>
+          <div class="flow-step"><div class="step-dot dot-speed">5</div><div class="step-text">File under <strong>"Perplexity" folder</strong> with (Perplexity) label</div></div>
+        </div>
+        <div class="tip">Great for: fact-checking, quick research, finding sources fast.</div>
+      </div>
+
+      <div class="workflow-card color-speed">
+        <div class="card-header">
+          <div class="card-icon icon-bg-speed">💬</div>
+          <div>
+            <div class="card-name">ChatGPT Auto</div>
+            <div class="card-subtitle">Fast casual Q&A</div>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="flow-step"><div class="step-dot dot-speed">1</div><div class="step-text">Open <strong>ChatGPT</strong> on Auto mode</div></div>
+          <div class="flow-step"><div class="step-dot dot-speed">2</div><div class="step-text"><strong>Casual Prompting</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-speed">3</div><div class="step-text">Label chat: <strong>"(Date) (Main Topic)"</strong></div></div>
+        </div>
+        <div class="tip">Auto mode picks the best model for your query automatically.</div>
+      </div>
+
+      <div class="workflow-card color-speed">
+        <div class="card-header">
+          <div class="card-icon icon-bg-speed">🌐</div>
+          <div>
+            <div class="card-name">Google AI Mode</div>
+            <div class="card-subtitle">Search + Gemini combined</div>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="flow-step"><div class="step-dot dot-speed">1</div><div class="step-text">Open <strong>Google AI Mode</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-speed">2</div><div class="step-text"><strong>Casual Prompting</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-speed">3</div><div class="step-text">Click <strong>Page Tools → Ask Gemini</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-speed">4</div><div class="step-text">Continue with <strong>Gemini 3 Fast</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-speed">5</div><div class="step-text">Chat auto-created — label: <strong>"(Date) Google AI Mode (Topic)"</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-speed">6</div><div class="step-text">Continue <strong>Casual Prompting</strong> in the thread</div></div>
+        </div>
+        <div class="tip">Seamlessly bridges web search results with AI analysis.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SERIOUS WORK -->
+  <section id="serious" class="section">
+    <div class="section-header">
+      <div class="section-tag tag-serious">🧠 Serious Work</div>
+      <h2 class="section-title">Deep Work Workflows</h2>
+      <p class="section-desc">When quality matters. These workflows use the most powerful AI models for complex analysis, research, and writing.</p>
+    </div>
+    <div class="workflow-grid">
+
+      <div class="workflow-card color-serious">
+        <div class="card-header">
+          <div class="card-icon icon-bg-serious">🤖</div>
+          <div>
+            <div class="card-name">Claude Sonnet 4.6</div>
+            <div class="card-subtitle">Smart analysis & writing</div>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="flow-step"><div class="step-dot dot-serious">1</div><div class="step-text">Open <strong>Claude Sonnet 4.6</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-serious">2</div><div class="step-text"><strong>Casual Prompting</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-serious">3</div><div class="step-text">Label chat: <strong>"(Date) Smart Friend (Topic)"</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-serious">4</div><div class="step-text"><strong>Save useful artifacts</strong> to Google Drive</div></div>
+          <div class="flow-step"><div class="step-dot dot-serious">5</div><div class="step-text">File under <strong>"Claude" folder</strong> with (Claude) label</div></div>
+        </div>
+        <div class="tip">Best for: essays, analysis, code review, nuanced explanations.</div>
+      </div>
+
+      <div class="workflow-card color-serious">
+        <div class="card-header">
+          <div class="card-icon icon-bg-serious">🧩</div>
+          <div>
+            <div class="card-name">ChatGPT 5.4 Thinking</div>
+            <div class="card-subtitle">Agent & research tasks</div>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="flow-step"><div class="step-dot dot-serious">1</div><div class="step-text">Open <strong>ChatGPT 5.4 Thinking</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-serious">2</div><div class="step-text"><strong>Casual Prompting</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-serious">3</div><div class="step-text">Use <strong>Agent Mode</strong> connector when applicable</div></div>
+          <div class="flow-step"><div class="step-dot dot-serious">4</div><div class="step-text">Use <strong>Deep Research</strong> connector when applicable</div></div>
+          <div class="flow-step"><div class="step-dot dot-serious">5</div><div class="step-text">Label chat: <strong>"(Date) Personal Assistant (Topic)"</strong></div></div>
+        </div>
+        <div class="tip">Use Agent Mode for multi-step tasks; Deep Research for comprehensive topic reports.</div>
+      </div>
+
+      <div class="workflow-card color-serious">
+        <div class="card-header">
+          <div class="card-icon icon-bg-serious">💎</div>
+          <div>
+            <div class="card-name">Gemini 3.1 Pro</div>
+            <div class="card-subtitle">Expert-level responses</div>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="flow-step"><div class="step-dot dot-serious">1</div><div class="step-text">Open <strong>Gemini 3.1 Pro</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-serious">2</div><div class="step-text"><strong>Casual Prompting</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-serious">3</div><div class="step-text">Label chat: <strong>"(Date) Expert (Topic)"</strong></div></div>
+        </div>
+        <div class="tip">Gemini's Pro tier excels at technical, scientific, and multi-step reasoning tasks.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FUN WORK -->
+  <section id="fun" class="section">
+    <div class="section-header">
+      <div class="section-tag tag-fun">🎉 Fun Work</div>
+      <h2 class="section-title">Fun Workflows</h2>
+      <p class="section-desc">Explore personalized AI experiences, voice interactions, real-world connectors, and creative brainstorming.</p>
+    </div>
+    <div class="workflow-grid">
+
+      <div class="workflow-card color-fun">
+        <div class="card-header">
+          <div class="card-icon icon-bg-fun">🧑‍💻</div>
+          <div>
+            <div class="card-name">BrendanGPT</div>
+            <div class="card-subtitle">Custom AI personality</div>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="flow-step"><div class="step-dot dot-fun">1</div><div class="step-text">Open <strong>ChatGPT 5.4 Thinking</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-fun">2</div><div class="step-text">Select CustomGPT <strong>"BrendanGPT"</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-fun">3</div><div class="step-text"><strong>Casual Voice Prompting</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-fun">4</div><div class="step-text">Label chat: <strong>"(Date) Digital Clone (Topic)"</strong></div></div>
+        </div>
+        <div class="tip">A CustomGPT is a personalized AI trained with custom instructions and a specific persona.</div>
+      </div>
+
+      <div class="workflow-card color-fun">
+        <div class="card-header">
+          <div class="card-icon icon-bg-fun">🔗</div>
+          <div>
+            <div class="card-name">ChatGPT + Connectors</div>
+            <div class="card-subtitle">Real-world integrations</div>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="flow-step"><div class="step-dot dot-fun">1</div><div class="step-text">Open <strong>ChatGPT 5.4 Thinking</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-fun">2</div><div class="step-text">Add connector: <strong>DoorDash / Uber / Spotify / Expedia+Booking.com</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-fun">3</div><div class="step-text"><strong>Casual Prompting</strong> (e.g. "Order pizza" or "Find a flight to NYC")</div></div>
+          <div class="flow-step"><div class="step-dot dot-fun">4</div><div class="step-text">Label chat: <strong>"(Date) OG Connectors (Topic)"</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-fun">5</div><div class="step-text"><strong>For Expedia:</strong> Click "See Fare Details" → "Book on Expedia" → compare on Google Flights + airline site → book direct</div></div>
+          <div class="flow-step"><div class="step-dot dot-fun">6</div><div class="step-text"><strong>For Booking.com:</strong> Click "View on Booking.com" → compare on Google Hotels + hotel site → book direct</div></div>
+          <div class="flow-step"><div class="step-dot dot-fun">7</div><div class="step-text"><strong>For Spotify:</strong> Save playlist → open in Spotify → modify as needed</div></div>
+        </div>
+        <div class="tip">Always verify travel prices on the airline/hotel's direct website before booking.</div>
+      </div>
+
+      <div class="workflow-card color-fun">
+        <div class="card-header">
+          <div class="card-icon icon-bg-fun">💡</div>
+          <div>
+            <div class="card-name">Gemini Gems Brainstormer</div>
+            <div class="card-subtitle">Creative idea generation</div>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="flow-step"><div class="step-dot dot-fun">1</div><div class="step-text">Open <strong>Gemini 3.1 Pro</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-fun">2</div><div class="step-text">Select <strong>Gems → Brainstormer</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-fun">3</div><div class="step-text"><strong>Casual Prompting</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-fun">4</div><div class="step-text">Label chat: <strong>"(Date) Gems Brainstormer Mode (Topic)"</strong></div></div>
+        </div>
+        <div class="tip">Gems are specialized AI modes within Gemini, each optimized for a different task type.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- NICHE -->
+  <section id="niche" class="section">
+    <div class="section-header">
+      <div class="section-tag tag-niche">🔬 Niche Use Cases</div>
+      <h2 class="section-title">Niche Workflows</h2>
+      <p class="section-desc">Specialized workflows for voice transcription, medical research, and high-quality text-to-speech audio.</p>
+    </div>
+    <div class="workflow-grid">
+
+      <div class="workflow-card color-niche">
+        <div class="card-header">
+          <div class="card-icon icon-bg-niche">🎙️</div>
+          <div>
+            <div class="card-name">Voice Memos → BrendanGPT</div>
+            <div class="card-subtitle">Capture & analyze conversations</div>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="flow-step"><div class="step-dot dot-niche">1</div><div class="step-text">Open <strong>Voice Memos App</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-niche">2</div><div class="step-text"><strong>Record</strong> in-person conversation or any audio</div></div>
+          <div class="flow-step"><div class="step-dot dot-niche">3</div><div class="step-text">Label memo: <strong>"(Topic) (Date)"</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-niche">4</div><div class="step-text"><strong>Copy transcript</strong> to BrendanGPT</div></div>
+          <div class="flow-step"><div class="step-dot dot-niche">5</div><div class="step-text"><strong>Casual Prompting</strong> to analyze, summarize, or expand</div></div>
+          <div class="flow-step"><div class="step-dot dot-niche">6</div><div class="step-text">Label chat: <strong>"(Date) Digital Clone (Topic)"</strong></div></div>
+        </div>
+        <div class="tip">Great for lecture notes, meeting recaps, or brainstorming sessions you had out loud.</div>
+      </div>
+
+      <div class="workflow-card color-niche">
+        <div class="card-header">
+          <div class="card-icon icon-bg-niche">🩺</div>
+          <div>
+            <div class="card-name">OpenEvidence</div>
+            <div class="card-subtitle">Medical research with citations</div>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="flow-step"><div class="step-dot dot-niche">1</div><div class="step-text">Open <strong>OpenEvidence</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-niche">2</div><div class="step-text">Use another AI platform first to <strong>generate an optimal prompt</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-niche">3</div><div class="step-text">Paste optimized prompt into OpenEvidence</div></div>
+          <div class="flow-step"><div class="step-dot dot-niche">4</div><div class="step-text">Use response → ask <strong>BrendanGPT</strong> to format into a formal medical diagnosis</div></div>
+          <div class="flow-step"><div class="step-dot dot-niche">5</div><div class="step-text">Click interesting <strong>citations</strong> in OpenEvidence to learn more</div></div>
+        </div>
+        <div class="tip">Prompt stacking: generate a better prompt first, then use it in a specialized tool for higher quality results.</div>
+      </div>
+
+      <div class="workflow-card color-niche">
+        <div class="card-header">
+          <div class="card-icon icon-bg-niche">🔊</div>
+          <div>
+            <div class="card-name">ElevenLabs (Phone)</div>
+            <div class="card-subtitle">Text-to-speech on mobile</div>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="flow-step"><div class="step-dot dot-niche">1</div><div class="step-text">Open <strong>ElevenLabs app</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-niche">2</div><div class="step-text">Go to <strong>Text To Speech</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-niche">3</div><div class="step-text">Select voice: <strong>"Brendan Hwang" [Eleven v3 (alpha)]</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-niche">4</div><div class="step-text">On phone: <strong>Download to Files App</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-niche">5</div><div class="step-text">Add to <strong>"ElevenLabs" folder</strong> on phone with date</div></div>
+        </div>
+      </div>
+
+      <div class="workflow-card color-niche">
+        <div class="card-header">
+          <div class="card-icon icon-bg-niche">💻</div>
+          <div>
+            <div class="card-name">ElevenLabs (PC)</div>
+            <div class="card-subtitle">Text-to-speech on desktop</div>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="flow-step"><div class="step-dot dot-niche">1</div><div class="step-text">Open <strong>ElevenLabs website</strong> on PC</div></div>
+          <div class="flow-step"><div class="step-dot dot-niche">2</div><div class="step-text">Select voice: <strong>"Brendan Hwang"</strong> with settings:<br/>Speed 0.90 · Stability 45% · Similarity 55% · Style: None</div></div>
+          <div class="flow-step"><div class="step-dot dot-niche">3</div><div class="step-text"><strong>Download MP3</strong> on PC → ElevenLabs folder with date</div></div>
+          <div class="flow-step"><div class="step-dot dot-niche">4</div><div class="step-text"><strong>Send to self</strong> via Gmail</div></div>
+          <div class="flow-step"><div class="step-dot dot-niche">5</div><div class="step-text">Download to Files on phone from Gmail → <strong>"ElevenLabs" folder</strong> with date</div></div>
+        </div>
+        <div class="tip">The PC workflow gives you finer control over voice settings for more natural-sounding audio.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TOOLS -->
+  <section id="tools" class="section">
+    <div class="section-header">
+      <div class="section-tag tag-tools">🛠 Tools</div>
+      <h2 class="section-title">Productivity Tool Workflows</h2>
+      <p class="section-desc">AI built into the apps you already use — Chrome, Google Maps, Slides, Sheets, YouTube, and more.</p>
+    </div>
+    <div class="workflow-grid">
+
+      <div class="workflow-card color-tools">
+        <div class="card-header">
+          <div class="card-icon icon-bg-tools">🌐</div>
+          <div>
+            <div class="card-name">Gemini in Chrome</div>
+            <div class="card-subtitle">Analyze any webpage</div>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="flow-step"><div class="step-dot dot-tools">1</div><div class="step-text">Open any page in <strong>Google Chrome</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-tools">2</div><div class="step-text">Activate <strong>Gemini in Chrome</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-tools">3</div><div class="step-text">Try: <strong>"Create FAQ About This Topic"</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-tools">4</div><div class="step-text">Continue with <strong>Gemini 3 Fast</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-tools">5</div><div class="step-text">Chat auto-created — label: <strong>"(Date) Chrome (Topic)"</strong></div></div>
+        </div>
+        <div class="tip">Turn any webpage into a study guide, FAQ, or summary in seconds.</div>
+      </div>
+
+      <div class="workflow-card color-tools">
+        <div class="card-header">
+          <div class="card-icon icon-bg-tools">🗺️</div>
+          <div>
+            <div class="card-name">Google Maps Gemini</div>
+            <div class="card-subtitle">AI navigation assistant</div>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="flow-step"><div class="step-dot dot-tools">1</div><div class="step-text">Open <strong>Google Maps App</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-tools">2</div><div class="step-text">Set destination → <strong>Start Navigation</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-tools">3</div><div class="step-text">Spotify: <strong>"Continue Playing"</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-tools">4</div><div class="step-text">Use <strong>Google Maps Gemini feature</strong> for voice prompting</div></div>
+          <div class="flow-step"><div class="step-dot dot-tools">5</div><div class="step-text">Chat auto-created — label: <strong>"(Date) Google Maps (Topic)"</strong></div></div>
+        </div>
+        <div class="tip">Ask about restaurants, traffic, local history, or anything hands-free while driving.</div>
+      </div>
+
+      <div class="workflow-card color-tools">
+        <div class="card-header">
+          <div class="card-icon icon-bg-tools">📊</div>
+          <div>
+            <div class="card-name">Google Slides + Sheets</div>
+            <div class="card-subtitle">Workspace AI features</div>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="flow-step"><div class="step-dot dot-tools">1</div><div class="step-text">Open <strong>Google Slides on PC</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-tools">2</div><div class="step-text">Go to <strong>Slide Tab → "Beautify This Slide"</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-tools">3</div><div class="step-text">Make specific requests via <strong>Gemini for Google Workspace</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-tools">4</div><div class="step-text">In <strong>Google Sheets</strong>: use Gemini to <strong>"Generate A Chart Using This Data"</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-tools">5</div><div class="step-text">Also: <strong>"Generate Insights Or Trends For This Data"</strong></div></div>
+        </div>
+        <div class="tip">No need to manually format charts — describe what you want and Gemini builds it.</div>
+      </div>
+
+      <div class="workflow-card color-tools">
+        <div class="card-header">
+          <div class="card-icon icon-bg-tools">▶️</div>
+          <div>
+            <div class="card-name">YouTube + Gemini</div>
+            <div class="card-subtitle">Video summaries</div>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="flow-step"><div class="step-dot dot-tools">1</div><div class="step-text">Open <strong>YouTube App</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-tools">2</div><div class="step-text">Use <strong>Gemini Extension</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-tools">3</div><div class="step-text">Try: <strong>"Summarize The Video"</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-tools">4</div><div class="step-text">Also: <strong>"Recommend Related Content"</strong></div></div>
+        </div>
+        <div class="tip">Skip the full video — get the key points first, then decide if it's worth watching.</div>
+      </div>
+
+      <div class="workflow-card color-tools">
+        <div class="card-header">
+          <div class="card-icon icon-bg-tools">📈</div>
+          <div>
+            <div class="card-name">Google Finance + AI</div>
+            <div class="card-subtitle">Market research & analysis</div>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="flow-step"><div class="step-dot dot-tools">1</div><div class="step-text">Open <strong>Google Finance</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-tools">2</div><div class="step-text">Read <strong>Market Summary</strong> for different markets</div></div>
+          <div class="flow-step"><div class="step-dot dot-tools">3</div><div class="step-text"><strong>Dive deeper</strong> on topics with AI</div></div>
+          <div class="flow-step"><div class="step-dot dot-tools">4</div><div class="step-text"><strong>Casual Prompting</strong> in your AI tool of choice</div></div>
+        </div>
+        <div class="tip">Use the market data as a starting point, then ask AI to explain trends or implications.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTENT CREATION -->
+  <section id="content" class="section">
+    <div class="section-header">
+      <div class="section-tag tag-content">🎨 Content Creation</div>
+      <h2 class="section-title">Creative Workflows</h2>
+      <p class="section-desc">From AI videos and music to shareable research reports and full web projects — create content worth keeping.</p>
+    </div>
+
+    <div class="callout">
+      <strong>Prompt Stacking for Content:</strong> For serious content creation, use one AI platform to generate an optimized prompt first, then feed that polished prompt to the main creation tool. This consistently produces higher-quality results.
+    </div>
+
+    <div class="workflow-grid">
+
+      <div class="workflow-card color-content">
+        <div class="card-header">
+          <div class="card-icon icon-bg-content">🎬</div>
+          <div>
+            <div class="card-name">Sora</div>
+            <div class="card-subtitle">AI video generation</div>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="flow-step"><div class="step-dot dot-content">1</div><div class="step-text">Open <strong>Sora</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-content">2</div><div class="step-text"><strong>Casual Prompting</strong> to describe your video</div></div>
+          <div class="flow-step"><div class="step-dot dot-content">3</div><div class="step-text"><strong>Edit caption</strong> to something engaging</div></div>
+          <div class="flow-step"><div class="step-dot dot-content">4</div><div class="step-text">Share and <strong>create public link</strong> if desired</div></div>
+          <div class="flow-step"><div class="step-dot dot-content">5</div><div class="step-text">Download to Photos App → <strong>"AI Generated Videos" album</strong></div></div>
+        </div>
+      </div>
+
+      <div class="workflow-card color-content">
+        <div class="card-header">
+          <div class="card-icon icon-bg-content">📋</div>
+          <div>
+            <div class="card-name">Perplexity Deep Research</div>
+            <div class="card-subtitle">Shareable research reports</div>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="flow-step"><div class="step-dot dot-content">1</div><div class="step-text">Open <strong>Perplexity → Space "Deep Research"</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-content">2</div><div class="step-text"><strong>Casual Prompting</strong> with <strong>Deep Research: On</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-content">3</div><div class="step-text">Save to <strong>Google Drive → "Perplexity" folder</strong> with (Perplexity) label</div></div>
+          <div class="flow-step"><div class="step-dot dot-content">4</div><div class="step-text"><strong>Rename</strong> to a cool descriptive title</div></div>
+          <div class="flow-step"><div class="step-dot dot-content">5</div><div class="step-text">Click <strong>Manage Access → "Anyone with the link"</strong></div></div>
+        </div>
+      </div>
+
+      <div class="workflow-card color-content">
+        <div class="card-header">
+          <div class="card-icon icon-bg-content">✍️</div>
+          <div>
+            <div class="card-name">Claude Opus 4.6</div>
+            <div class="card-subtitle">High-quality creative writing</div>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="flow-step"><div class="step-dot dot-content">1</div><div class="step-text">Use another AI first to <strong>generate optimal prompt</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-content">2</div><div class="step-text">Open <strong>Claude Opus 4.6</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-content">3</div><div class="step-text">Paste optimized prompt → label: <strong>"(Date) Creative Genius (Topic)"</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-content">4</div><div class="step-text">Save artifact to <strong>Google Drive → "Claude" folder</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-content">5</div><div class="step-text"><strong>Share + copy link</strong> for the artifact</div></div>
+          <div class="flow-step"><div class="step-dot dot-content">6</div><div class="step-text">Rename to cool title → <strong>Manage Access → Anyone with link</strong></div></div>
+        </div>
+        <div class="tip">Opus 4.6 is the most creative Claude model — ideal for stories, essays, and polished long-form content.</div>
+      </div>
+
+      <div class="workflow-card color-content">
+        <div class="card-header">
+          <div class="card-icon icon-bg-content">🔭</div>
+          <div>
+            <div class="card-name">Gemini Deep Research</div>
+            <div class="card-subtitle">Comprehensive research reports</div>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="flow-step"><div class="step-dot dot-content">1</div><div class="step-text">Open <strong>Gemini 3.1 Pro → Tools "Deep Research"</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-content">2</div><div class="step-text">Use another AI first to <strong>generate optimal prompt</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-content">3</div><div class="step-text">Label: <strong>"(Date) Deep Research (Topic)"</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-content">4</div><div class="step-text">Save to <strong>Google Drive → "Gemini" folder</strong> with (Gemini) label</div></div>
+          <div class="flow-step"><div class="step-dot dot-content">5</div><div class="step-text">Rename to cool title → <strong>Manage Access → Anyone with link</strong></div></div>
+        </div>
+      </div>
+
+      <div class="workflow-card color-content">
+        <div class="card-header">
+          <div class="card-icon icon-bg-content">🎵</div>
+          <div>
+            <div class="card-name">Gemini Lyria Music</div>
+            <div class="card-subtitle">AI music generation</div>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="flow-step"><div class="step-dot dot-content">1</div><div class="step-text">Open <strong>Gemini 3.1 Pro → Tools "Create Music" (Lyria)</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-content">2</div><div class="step-text"><strong>Casual Prompting</strong> to describe your music</div></div>
+          <div class="flow-step"><div class="step-dot dot-content">3</div><div class="step-text">Label chat: <strong>"(Date) Music (Topic)"</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-content">4</div><div class="step-text">Download to Files App → <strong>"Gemini Music" folder</strong> with date</div></div>
+        </div>
+      </div>
+
+      <div class="workflow-card color-content">
+        <div class="card-header">
+          <div class="card-icon icon-bg-content">📖</div>
+          <div>
+            <div class="card-name">Gemini Gems Storybook</div>
+            <div class="card-subtitle">Creative storytelling</div>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="flow-step"><div class="step-dot dot-content">1</div><div class="step-text">Open <strong>Gemini 3.1 Pro → Gems → Storybook</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-content">2</div><div class="step-text">Use another AI first to <strong>generate optimal prompt</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-content">3</div><div class="step-text">Label: <strong>"(Date) Gems Storybook Mode (Topic)"</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-content">4</div><div class="step-text"><strong>Share and copy link</strong> for the Storybook</div></div>
+          <div class="flow-step"><div class="step-dot dot-content">5</div><div class="step-text">Continue <strong>Casual Prompting</strong> to expand the story</div></div>
+        </div>
+      </div>
+
+      <div class="workflow-card color-content">
+        <div class="card-header">
+          <div class="card-icon icon-bg-content">🖼️</div>
+          <div>
+            <div class="card-name">Gemini Image Generation</div>
+            <div class="card-subtitle">AI image creation</div>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="flow-step"><div class="step-dot dot-content">1</div><div class="step-text">Open <strong>Gemini 3.1 Pro → Tools "Create Images" (Nano Banana 2)</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-content">2</div><div class="step-text"><strong>Casual Prompting</strong> to describe your image</div></div>
+          <div class="flow-step"><div class="step-dot dot-content">3</div><div class="step-text">Label chat: <strong>"(Date) Images (Topic)"</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-content">4</div><div class="step-text">Download to Photos App → <strong>"Gemini" album</strong></div></div>
+        </div>
+      </div>
+
+      <div class="workflow-card color-content">
+        <div class="card-header">
+          <div class="card-icon icon-bg-content">🚀</div>
+          <div>
+            <div class="card-name">Claude Code</div>
+            <div class="card-subtitle">Build & deploy web projects</div>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="flow-step"><div class="step-dot dot-content">1</div><div class="step-text">Open <strong>Claude Code → Choose "Plan"</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-content">2</div><div class="step-text">Environment: <strong>Default</strong> → connect your <strong>GitHub repository</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-content">3</div><div class="step-text">Choose <strong>Base Branch → Casual Prompting</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-content">4</div><div class="step-text">Label: <strong>"(Date) Claude Code (Topic)"</strong> → switch to <strong>"Code"</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-content">5</div><div class="step-text">On GitHub: Settings → Pages → Select branch → Select <strong>"/ (root)"</strong> → Save</div></div>
+          <div class="flow-step"><div class="step-dot dot-content">6</div><div class="step-text">A <strong>public link</strong> appears at the top of the Pages tab</div></div>
+          <div class="flow-step"><div class="step-dot dot-content">7</div><div class="step-text">For sub-projects: add <strong>"/(Folder Name)/"</strong> to the URL</div></div>
+          <div class="flow-step"><div class="step-dot dot-content">8</div><div class="step-text">If broken: <strong>Create Pull Request → Merge</strong> on GitHub</div></div>
+        </div>
+        <div class="tip">This guide was built with Claude Code! Any project you build can be publicly shared via GitHub Pages for free.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- DIGITAL DETOX -->
+  <section id="detox" class="section">
+    <div class="section-header">
+      <div class="section-tag tag-detox">🌿 Digital Detox</div>
+      <h2 class="section-title">Reset & Recharge</h2>
+      <p class="section-desc">AI tools are powerful, but your mind, body, and spirit need regular breaks. Don't stop until you notice a genuine positive shift.</p>
+    </div>
+
+    <div class="workflow-grid">
+
+      <div class="workflow-card color-detox">
+        <div class="card-header">
+          <div class="card-icon icon-bg-detox">🧘</div>
+          <div>
+            <div class="card-name">Physical Reset</div>
+            <div class="card-subtitle">Static stretching routine</div>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="flow-step"><div class="step-dot dot-detox">1</div><div class="step-text">Begin <strong>Static Stretching</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-detox">2</div><div class="step-text">Do not stop until you have a <strong>noticeable positive shift</strong> in physical state</div></div>
+        </div>
+        <div class="tip">Static stretching (holding positions 20–60s) reduces tension and signals your nervous system to calm down.</div>
+      </div>
+
+      <div class="workflow-card color-detox">
+        <div class="card-header">
+          <div class="card-icon icon-bg-detox">🙏</div>
+          <div>
+            <div class="card-name">Spiritual Reset</div>
+            <div class="card-subtitle">Repeating mantra</div>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="flow-step"><div class="step-dot dot-detox">1</div><div class="step-text">Choose a <strong>mantra of max 8 words</strong></div></div>
+          <div class="flow-step"><div class="step-dot dot-detox">2</div><div class="step-text"><strong>Repeat it</strong> continuously</div></div>
+          <div class="flow-step"><div class="step-dot dot-detox">3</div><div class="step-text">Do not stop until you have a <strong>noticeable positive shift</strong> in spiritual state</div></div>
+        </div>
+        <div class="tip">Keep the mantra short and meaningful. Examples: "I am calm, focused, and present." or "One step at a time."</div>
+      </div>
+
+      <div class="workflow-card color-detox">
+        <div class="card-header">
+          <div class="card-icon icon-bg-detox">🌬️</div>
+          <div>
+            <div class="card-name">Mental Reset</div>
+            <div class="card-subtitle">Progressive breathing protocol</div>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="flow-step"><div class="step-dot dot-detox">1</div><div class="step-text"><strong>2s in / 2s out</strong> — ~1 minute</div></div>
+          <div class="flow-step"><div class="step-dot dot-detox">2</div><div class="step-text"><strong>3s in / 3s out</strong> — ~1 minute</div></div>
+          <div class="flow-step"><div class="step-dot dot-detox">3</div><div class="step-text"><strong>5s in</strong> — ~1 minute</div></div>
+          <div class="flow-step"><div class="step-dot dot-detox">4</div><div class="step-text"><strong>5s out</strong> — ~1 minute</div></div>
+          <div class="flow-step"><div class="step-dot dot-detox">5</div><div class="step-text"><strong>6s in / 6s out</strong> — ~1 minute</div></div>
+          <div class="flow-step"><div class="step-dot dot-detox">6</div><div class="step-text"><strong>Do Nothing</strong> — ~1 minute</div></div>
+          <div class="flow-step"><div class="step-dot dot-detox">7</div><div class="step-text">Do not stop until you have a <strong>noticeable positive shift</strong> in mental state</div></div>
+        </div>
+        <div class="tip">This is box/resonance breathing. The 6s rhythm (~5 breaths/min) activates the parasympathetic nervous system for deep calm.</div>
+      </div>
+
+    </div>
+
+    <div class="callout" style="margin-top:8px;">
+      <strong>The goal isn't a timer — it's a felt shift.</strong> Each protocol ends when you genuinely feel better, not just when the clock runs out. Pair all three for a full reset.
+    </div>
+  </section>
+
+</div>
+
+<script>
+  function showSection(id, el) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    el.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
