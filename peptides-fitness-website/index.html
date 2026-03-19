@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PeptideFit – Popular Fitness Peptides Guide</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="hero">
+    <div class="hero-overlay">
+      <nav class="navbar">
+        <div class="logo">PeptideFit</div>
+        <ul class="nav-links">
+          <li><a href="#peptides">Peptides</a></li>
+          <li><a href="#benefits">Benefits</a></li>
+          <li><a href="#comparison">Compare</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+      <div class="hero-content">
+        <h1>The Fitness Peptide Guide</h1>
+        <p>Research-backed information on the most popular peptides used by athletes and fitness enthusiasts in 2026.</p>
+        <a href="#peptides" class="btn-primary">Explore Peptides</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- DISCLAIMER -->
+  <section class="disclaimer">
+    <div class="container">
+      <p><strong>Disclaimer:</strong> This website is for educational and informational purposes only. Peptides are research compounds and are not approved by the FDA for many of the uses described here. Consult a licensed healthcare professional before use.</p>
+    </div>
+  </section>
+
+  <!-- PEPTIDE CARDS -->
+  <section id="peptides" class="section">
+    <div class="container">
+      <h2 class="section-title">Popular Fitness Peptides</h2>
+      <p class="section-sub">Click any card to learn more about each peptide.</p>
+
+      <div class="grid">
+
+        <div class="card" onclick="openModal('bpc157')">
+          <div class="card-badge recovery">Recovery</div>
+          <div class="card-icon">&#9854;</div>
+          <h3>BPC-157</h3>
+          <p>Body Protection Compound – renowned for accelerating tissue and tendon repair.</p>
+          <span class="card-tag">Healing</span>
+          <span class="card-tag">Anti-inflammatory</span>
+          <span class="card-tag">Gut Health</span>
+        </div>
+
+        <div class="card" onclick="openModal('tb500')">
+          <div class="card-badge recovery">Recovery</div>
+          <div class="card-icon">&#128167;</div>
+          <h3>TB-500 (Thymosin Beta-4)</h3>
+          <p>Promotes cell migration, angiogenesis, and faster recovery from injuries.</p>
+          <span class="card-tag">Flexibility</span>
+          <span class="card-tag">Wound Healing</span>
+          <span class="card-tag">Anti-fibrotic</span>
+        </div>
+
+        <div class="card" onclick="openModal('ipamorelin')">
+          <div class="card-badge growth">Growth</div>
+          <div class="card-icon">&#128170;</div>
+          <h3>Ipamorelin / CJC-1295</h3>
+          <p>A growth hormone secretagogue stack widely used for muscle gain and fat loss.</p>
+          <span class="card-tag">GH Release</span>
+          <span class="card-tag">Muscle Growth</span>
+          <span class="card-tag">Fat Loss</span>
+        </div>
+
+        <div class="card" onclick="openModal('mk677')">
+          <div class="card-badge growth">Growth</div>
+          <div class="card-icon">&#128293;</div>
+          <h3>MK-677 (Ibutamoren)</h3>
+          <p>Oral GH secretagogue that increases IGF-1 levels and improves sleep quality.</p>
+          <span class="card-tag">IGF-1</span>
+          <span class="card-tag">Sleep</span>
+          <span class="card-tag">Lean Mass</span>
+        </div>
+
+        <div class="card" onclick="openModal('semaglutide')">
+          <div class="card-badge fat-loss">Fat Loss</div>
+          <div class="card-icon">&#9883;</div>
+          <h3>Semaglutide (GLP-1)</h3>
+          <p>GLP-1 receptor agonist gaining huge popularity for weight management and body recomposition.</p>
+          <span class="card-tag">Appetite Control</span>
+          <span class="card-tag">Weight Loss</span>
+          <span class="card-tag">Metabolic</span>
+        </div>
+
+        <div class="card" onclick="openModal('aod9604')">
+          <div class="card-badge fat-loss">Fat Loss</div>
+          <div class="card-icon">&#128200;</div>
+          <h3>AOD-9604</h3>
+          <p>A fragment of HGH specifically targeting fat metabolism without affecting blood sugar.</p>
+          <span class="card-tag">Lipolysis</span>
+          <span class="card-tag">Fat Oxidation</span>
+          <span class="card-tag">HGH Fragment</span>
+        </div>
+
+        <div class="card" onclick="openModal('selank')">
+          <div class="card-badge cognition">Cognition</div>
+          <div class="card-icon">&#129504;</div>
+          <h3>Selank</h3>
+          <p>Nootropic peptide used to reduce anxiety, improve focus, and support cognitive performance.</p>
+          <span class="card-tag">Anxiety Relief</span>
+          <span class="card-tag">Focus</span>
+          <span class="card-tag">Neuroprotective</span>
+        </div>
+
+        <div class="card" onclick="openModal('epithalon')">
+          <div class="card-badge longevity">Longevity</div>
+          <div class="card-icon">&#9643;</div>
+          <h3>Epithalon</h3>
+          <p>Telomerase activator studied for anti-aging effects, sleep cycle regulation, and cellular repair.</p>
+          <span class="card-tag">Telomere</span>
+          <span class="card-tag">Anti-Aging</span>
+          <span class="card-tag">Sleep</span>
+        </div>
+
+        <div class="card" onclick="openModal('ghrp6')">
+          <div class="card-badge growth">Growth</div>
+          <div class="card-icon">&#128212;</div>
+          <h3>GHRP-2 / GHRP-6</h3>
+          <p>Growth hormone releasing peptides that stimulate the pituitary gland to release GH in pulses.</p>
+          <span class="card-tag">GH Pulse</span>
+          <span class="card-tag">Appetite</span>
+          <span class="card-tag">Muscle Repair</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFITS SECTION -->
+  <section id="benefits" class="section section-dark">
+    <div class="container">
+      <h2 class="section-title light">Why Athletes Use Peptides</h2>
+      <div class="benefits-grid">
+        <div class="benefit-item">
+          <div class="benefit-icon">&#9889;</div>
+          <h4>Faster Recovery</h4>
+          <p>Peptides like BPC-157 and TB-500 dramatically reduce downtime from injuries and intense training.</p>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon">&#128170;</div>
+          <h4>Lean Muscle Growth</h4>
+          <p>GH secretagogues increase growth hormone and IGF-1 levels, supporting muscle protein synthesis.</p>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon">&#128293;</div>
+          <h4>Fat Loss</h4>
+          <p>Specific peptides target lipid metabolism, helping reduce body fat while preserving muscle mass.</p>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon">&#128564;</div>
+          <h4>Improved Sleep</h4>
+          <p>Peptides like MK-677 and Epithalon improve deep sleep stages critical for recovery and growth.</p>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon">&#129504;</div>
+          <h4>Cognitive Performance</h4>
+          <p>Nootropic peptides enhance focus, reduce anxiety, and support mental clarity under training stress.</p>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon">&#9203;</div>
+          <h4>Longevity</h4>
+          <p>Anti-aging peptides work at the cellular level to extend health span and reduce oxidative damage.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPARISON TABLE -->
+  <section id="comparison" class="section">
+    <div class="container">
+      <h2 class="section-title">Quick Comparison</h2>
+      <div class="table-wrap">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Peptide</th>
+              <th>Primary Goal</th>
+              <th>Route</th>
+              <th>Typical Cycle</th>
+              <th>Popularity</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>BPC-157</strong></td>
+              <td>Healing / Recovery</td>
+              <td>SubQ / Oral</td>
+              <td>4–6 weeks</td>
+              <td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td>
+            </tr>
+            <tr>
+              <td><strong>TB-500</strong></td>
+              <td>Injury Recovery</td>
+              <td>SubQ / IM</td>
+              <td>4–8 weeks</td>
+              <td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td>
+            </tr>
+            <tr>
+              <td><strong>Ipamorelin / CJC-1295</strong></td>
+              <td>Muscle Growth / Fat Loss</td>
+              <td>SubQ</td>
+              <td>12–16 weeks</td>
+              <td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td>
+            </tr>
+            <tr>
+              <td><strong>MK-677</strong></td>
+              <td>GH / Sleep / Mass</td>
+              <td>Oral</td>
+              <td>16–24 weeks</td>
+              <td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td>
+            </tr>
+            <tr>
+              <td><strong>Semaglutide</strong></td>
+              <td>Weight Loss</td>
+              <td>SubQ (weekly)</td>
+              <td>Ongoing</td>
+              <td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td>
+            </tr>
+            <tr>
+              <td><strong>AOD-9604</strong></td>
+              <td>Fat Loss</td>
+              <td>SubQ</td>
+              <td>8–12 weeks</td>
+              <td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span></td>
+            </tr>
+            <tr>
+              <td><strong>Selank</strong></td>
+              <td>Cognitive / Anxiety</td>
+              <td>Intranasal</td>
+              <td>2–4 weeks</td>
+              <td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span></td>
+            </tr>
+            <tr>
+              <td><strong>Epithalon</strong></td>
+              <td>Anti-aging / Longevity</td>
+              <td>SubQ / IM</td>
+              <td>10–20 days</td>
+              <td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span></td>
+            </tr>
+            <tr>
+              <td><strong>GHRP-2 / GHRP-6</strong></td>
+              <td>GH Release / Mass</td>
+              <td>SubQ</td>
+              <td>8–12 weeks</td>
+              <td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="section section-dark">
+    <div class="container">
+      <h2 class="section-title light">Frequently Asked Questions</h2>
+      <div class="faq-list">
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">What are peptides?<span class="faq-arrow">&#9660;</span></button>
+          <div class="faq-answer">
+            <p>Peptides are short chains of amino acids (typically 2–50) that act as signaling molecules in the body. Unlike full proteins, their small size allows them to cross certain biological barriers and interact directly with receptors, making them highly targeted in their effects.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">Are peptides the same as steroids?<span class="faq-arrow">&#9660;</span></button>
+          <div class="faq-answer">
+            <p>No. Peptides are structurally and mechanistically different from anabolic steroids. Most peptides work by stimulating your body's own hormone production rather than introducing synthetic hormones, resulting in a much more targeted and generally milder effect profile.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">Are fitness peptides legal?<span class="faq-arrow">&#9660;</span></button>
+          <div class="faq-answer">
+            <p>The legal status of peptides varies significantly by country and intended use. Some (like Semaglutide under brand names) are FDA-approved medications. Others are sold as "research chemicals" and are legal to purchase but not approved for human use. Always check your local laws and consult a physician.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">Do peptides require injection?<span class="faq-arrow">&#9660;</span></button>
+          <div class="faq-answer">
+            <p>Many peptides are administered via subcutaneous (under the skin) injection because oral bioavailability is poor — peptides can be broken down by stomach acid before absorption. However, some peptides like BPC-157 show effects orally, and others like Selank can be taken intranasally.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">What are the risks?<span class="faq-arrow">&#9660;</span></button>
+          <div class="faq-answer">
+            <p>Potential risks include water retention, fatigue, increased hunger, injection site reactions, hormonal disruption, and unknown long-term effects for many compounds. Because many peptides are not fully studied in humans, caution is warranted. Always source from reputable labs and consult a healthcare provider.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-logo">PeptideFit</p>
+      <p>This site provides educational information only. Always consult a qualified medical professional before starting any peptide protocol.</p>
+      <p class="footer-copy">&copy; 2026 PeptideFit. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- MODALS -->
+  <div id="modal-overlay" class="modal-overlay" onclick="closeModal()">
+    <div class="modal" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
