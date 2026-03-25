@@ -324,6 +324,22 @@ document.getElementById('fc-prev').addEventListener('click', () => {
   renderFlashcard();
 });
 
+// ── Essay Accordion ──
+document.querySelectorAll('.eq-trigger').forEach(trigger => {
+  trigger.addEventListener('click', () => {
+    const answer = trigger.nextElementSibling;
+    const isOpen = trigger.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.eq-trigger').forEach(t => t.classList.remove('open'));
+    document.querySelectorAll('.eq-answer').forEach(a => a.classList.remove('open'));
+    // Toggle clicked
+    if (!isOpen) {
+      trigger.classList.add('open');
+      answer.classList.add('open');
+    }
+  });
+});
+
 // ── Init ──
 initQuiz();
 renderFlashcard();

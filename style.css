@@ -301,6 +301,79 @@ th {
 tr:last-child td { border-bottom: none; }
 tr:hover td { background: var(--surface2); }
 
+/* ── Essay Q&A Accordion ── */
+.essay-intro {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-bottom: 1.25rem;
+}
+.eq-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 0.9rem;
+  overflow: hidden;
+}
+.eq-trigger {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: none;
+  border: none;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.5;
+  transition: background 0.15s;
+}
+.eq-trigger:hover { background: var(--surface2); }
+.eq-trigger.open { background: var(--surface2); color: var(--accent); }
+.eq-num {
+  min-width: 28px;
+  height: 28px;
+  line-height: 28px;
+  text-align: center;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 0.85rem;
+  font-weight: 800;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.eq-trigger.open .eq-num { background: var(--accent2); }
+.eq-arrow {
+  margin-left: auto;
+  flex-shrink: 0;
+  font-size: 1.1rem;
+  color: var(--muted);
+  transition: transform 0.25s;
+  padding-top: 2px;
+}
+.eq-trigger.open .eq-arrow { transform: rotate(180deg); color: var(--accent); }
+.eq-answer {
+  display: none;
+  padding: 0 1.5rem 1.25rem 1.5rem;
+  border-top: 1px solid var(--border);
+}
+.eq-answer.open { display: block; }
+.eq-answer p {
+  margin: 0.75rem 0 0.5rem;
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+.eq-answer ul {
+  margin-bottom: 0.75rem;
+  padding-left: 1.3rem;
+}
+.eq-answer li { font-size: 0.9rem; margin-bottom: 0.3rem; }
+.eq-answer strong { color: var(--accent); }
+.eq-answer em { color: var(--yellow); font-style: normal; font-weight: 600; }
+
 /* ── Essay steps ── */
 .essay-steps {
   padding-left: 0;
