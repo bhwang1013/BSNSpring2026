@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Showcase 2026 — Top Models & Latest Updates</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Cormorant+SC:wght@300;400;500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    /* ── TOKENS ── */
+    :root {
+      --bg:        #08080f;
+      --surface:   #0f0f1a;
+      --surface2:  #14141f;
+      --border:    rgba(255,255,255,0.07);
+      --gold:      #c9a96e;
+      --gold-l:    #e8cc99;
+      --gold-dim:  rgba(201,169,110,0.12);
+      --cyan:      #4dd9f0;
+      --cyan-dim:  rgba(77,217,240,0.10);
+      --purple:    #a78bfa;
+      --purple-dim:rgba(167,139,250,0.10);
+      --green:     #34d399;
+      --green-dim: rgba(52,211,153,0.10);
+      --red:       #f87171;
+      --text:      #e8e4dc;
+      --muted:     #6b6860;
+      --radius:    12px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 3px; }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ── GLOW ORBS ── */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.18;
+      animation: orb-drift 20s ease-in-out infinite alternate;
+    }
+    .orb-1 { width: 600px; height: 600px; background: var(--purple); top: -200px; left: -200px; }
+    .orb-2 { width: 500px; height: 500px; background: var(--cyan);   bottom: -150px; right: -150px; animation-delay: -10s; }
+    .orb-3 { width: 400px; height: 400px; background: var(--gold);   top: 40%; left: 50%; transform: translate(-50%,-50%); animation-delay: -5s; opacity: 0.10; }
+
+    @keyframes orb-drift {
+      from { transform: translate(0,0); }
+      to   { transform: translate(40px, 30px); }
+    }
+    .orb-3 { animation-name: orb-drift-center; }
+    @keyframes orb-drift-center {
+      from { transform: translate(-50%,-50%) translate(0,0); }
+      to   { transform: translate(-50%,-50%) translate(-40px,40px); }
+    }
+
+    /* ── LAYOUT ── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+    /* ── HEADER ── */
+    header {
+      position: relative;
+      text-align: center;
+      padding: 100px 24px 80px;
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 50%; transform: translateX(-50%);
+      width: 140px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .header-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      color: var(--cyan);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      opacity: 0.8;
+    }
+    .header-eyebrow span {
+      display: inline-block;
+      animation: blink 1.4s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .site-title {
+      font-family: 'Cormorant SC', serif;
+      font-size: clamp(3rem, 9vw, 6.5rem);
+      font-weight: 300;
+      letter-spacing: 0.05em;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--gold-l) 0%, var(--gold) 40%, var(--purple) 80%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+    }
+
+    .site-sub {
+      font-size: clamp(0.9rem, 2vw, 1.1rem);
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+    }
+
+    .header-stats {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      margin-top: 48px;
+      flex-wrap: wrap;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-family: 'Cormorant SC', serif;
+      font-size: 2.2rem;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .stat-label { font-size: 0.7rem; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; margin-top: 4px; }
+
+    /* ── NAV ── */
+    nav.section-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(8,8,15,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 0;
+    }
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 18px 20px;
+      cursor: pointer;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .nav-btn:hover, .nav-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+    /* ── SECTIONS ── */
+    section { padding: 80px 0; border-bottom: 1px solid var(--border); }
+    section:last-of-type { border-bottom: none; }
+
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      color: var(--cyan);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font-family: 'Cormorant SC', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 300;
+      color: var(--gold-l);
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .section-desc {
+      color: var(--muted);
+      font-size: 0.9rem;
+      max-width: 600px;
+      margin-bottom: 48px;
+      line-height: 1.8;
+    }
+
+    /* ── TICKER ── */
+    .ticker-wrap {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 0;
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+    }
+    .ticker-track {
+      display: flex;
+      gap: 0;
+      white-space: nowrap;
+      animation: ticker-scroll 50s linear infinite;
+    }
+    @keyframes ticker-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .ticker-item {
+      padding: 0 32px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+    .ticker-item .dot { color: var(--gold); margin-right: 8px; }
+    .ticker-item .tag {
+      color: var(--cyan);
+      margin-right: 6px;
+    }
+
+    /* ── UPDATES GRID ── */
+    .updates-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .update-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: border-color 0.25s, transform 0.25s;
+      cursor: default;
+    }
+    .update-card:hover { border-color: rgba(201,169,110,0.3); transform: translateY(-2px); }
+    .update-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; }
+    .update-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: var(--gold-dim);
+      color: var(--gold);
+    }
+    .update-badge.new   { background: rgba(52,211,153,0.1); color: var(--green); }
+    .update-badge.major { background: rgba(167,139,250,0.1); color: var(--purple); }
+    .update-badge.hot   { background: rgba(248,113,113,0.1); color: var(--red); }
+    .update-date { font-size: 0.7rem; color: var(--muted); }
+    .update-title { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; color: var(--text); margin-bottom: 8px; font-weight: 500; }
+    .update-body { font-size: 0.82rem; color: var(--muted); line-height: 1.7; }
+    .update-company { font-size: 0.7rem; color: var(--gold); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 12px; }
+
+    /* ── MODEL CARDS ── */
+    .models-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 24px;
+    }
+    .model-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+    }
+    .model-card:hover {
+      border-color: rgba(201,169,110,0.25);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+      transform: translateY(-3px);
+    }
+    .model-card-header {
+      padding: 24px 24px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .model-icon {
+      width: 48px; height: 48px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+    .model-name {
+      font-family: 'Cormorant SC', serif;
+      font-size: 1.2rem;
+      color: var(--text);
+      font-weight: 400;
+    }
+    .model-maker {
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+    .model-tier {
+      margin-left: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      padding: 4px 9px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+    .tier-frontier { background: rgba(201,169,110,0.12); color: var(--gold); border: 1px solid rgba(201,169,110,0.2); }
+    .tier-open     { background: rgba(52,211,153,0.10); color: var(--green); border: 1px solid rgba(52,211,153,0.2); }
+    .tier-search   { background: rgba(77,217,240,0.10); color: var(--cyan); border: 1px solid rgba(77,217,240,0.2); }
+
+    .model-card-body { padding: 24px; }
+    .model-desc { font-size: 0.85rem; color: var(--muted); margin-bottom: 20px; line-height: 1.75; }
+
+    .model-specs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .spec {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+    .spec-label { font-size: 0.62rem; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; margin-bottom: 3px; }
+    .spec-val { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--gold); }
+
+    .model-features { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+    .feat-tag {
+      font-size: 0.7rem;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .feat-tag:hover { border-color: var(--gold); color: var(--gold); }
+
+    .model-score-bar { margin-top: 4px; }
+    .score-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .score-label { font-size: 0.68rem; color: var(--muted); width: 80px; flex-shrink: 0; }
+    .score-track { flex: 1; height: 4px; background: var(--surface2); border-radius: 2px; overflow: hidden; }
+    .score-fill { height: 100%; border-radius: 2px; transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1); }
+    .score-num { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--muted); width: 28px; text-align: right; }
+
+    /* ── COMPARISON TABLE ── */
+    .table-wrap { overflow-x: auto; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      min-width: 700px;
+    }
+    thead tr { border-bottom: 1px solid var(--border); }
+    th {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 14px 16px;
+      text-align: left;
+      font-weight: 400;
+    }
+    td { padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.03); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+
+    .td-model { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 500; color: var(--text); }
+    .td-company { font-size: 0.7rem; color: var(--muted); }
+    .td-check { color: var(--green); font-size: 1.1rem; }
+    .td-dash { color: var(--muted); }
+    .td-partial { color: var(--gold); }
+    .td-score { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; }
+    .score-high { color: var(--green); }
+    .score-mid  { color: var(--gold); }
+    .score-low  { color: var(--red); }
+
+    /* ── TIMELINE ── */
+    .timeline { position: relative; padding-left: 32px; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 8px; top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--border) 10%, var(--border) 90%, transparent);
+    }
+    .tl-item { position: relative; margin-bottom: 36px; }
+    .tl-item::before {
+      content: '';
+      position: absolute;
+      left: -28px; top: 6px;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 10px rgba(201,169,110,0.5);
+    }
+    .tl-date { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--cyan); letter-spacing: 0.1em; margin-bottom: 4px; }
+    .tl-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+    .tl-body { font-size: 0.82rem; color: var(--muted); line-height: 1.7; }
+    .tl-company { display: inline-block; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 2px 8px; border-radius: 3px; margin-top: 6px; }
+
+    /* ── GLOW SCORE LEGEND ── */
+    .legend-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; font-size: 0.75rem; color: var(--muted); }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 24px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .footer-title { font-family: 'Cormorant SC', serif; font-size: 1.5rem; color: var(--gold); margin-bottom: 8px; }
+    .footer-sub { font-size: 0.78rem; color: var(--muted); line-height: 1.8; }
+    .footer-line { width: 60px; height: 1px; background: var(--gold-dim); margin: 20px auto; }
+
+    /* ── ANIMATIONS ── */
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .header-stats { gap: 28px; }
+      .models-grid { grid-template-columns: 1fr; }
+      .updates-grid { grid-template-columns: 1fr; }
+      .model-specs { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ambient glows -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- ── HEADER ── -->
+  <header>
+    <p class="header-eyebrow">INTELLIGENCE REPORT — MAY 2026 <span>▮</span></p>
+    <h1 class="site-title">AI Showcase</h1>
+    <p class="site-sub">The world's most powerful models — ranked, explained, and compared</p>
+    <div class="header-stats">
+      <div class="stat-item fade-in">
+        <div class="stat-num">8</div>
+        <div class="stat-label">Top Models</div>
+      </div>
+      <div class="stat-item fade-in" style="transition-delay:0.1s">
+        <div class="stat-num">1M+</div>
+        <div class="stat-label">Max Context</div>
+      </div>
+      <div class="stat-item fade-in" style="transition-delay:0.2s">
+        <div class="stat-num">2026</div>
+        <div class="stat-label">Current Year</div>
+      </div>
+      <div class="stat-item fade-in" style="transition-delay:0.3s">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Possibilities</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── NEWS TICKER ── -->
+  <div class="ticker-wrap">
+    <div class="ticker-track" id="tickerTrack"></div>
+  </div>
+
+  <!-- ── STICKY NAV ── -->
+  <nav class="section-nav">
+    <div class="nav-inner">
+      <button class="nav-btn active" data-target="updates">Latest Updates</button>
+      <button class="nav-btn" data-target="models">Top Models</button>
+      <button class="nav-btn" data-target="compare">Compare</button>
+      <button class="nav-btn" data-target="timeline">Timeline</button>
+    </div>
+  </nav>
+
+  <!-- ── UPDATES ── -->
+  <section id="updates">
+    <div class="container">
+      <p class="section-label">Breaking</p>
+      <h2 class="section-title">Latest Updates</h2>
+      <p class="section-desc">The biggest moves in AI over the past months — new releases, breakthroughs, and industry shifts.</p>
+      <div class="updates-grid" id="updatesGrid"></div>
+    </div>
+  </section>
+
+  <!-- ── MODELS ── -->
+  <section id="models">
+    <div class="container">
+      <p class="section-label">Deep Dive</p>
+      <h2 class="section-title">Top Models in the World</h2>
+      <p class="section-desc">A breakdown of every frontier AI model you need to know about — their strengths, architecture, and real-world performance.</p>
+      <div class="models-grid" id="modelsGrid"></div>
+    </div>
+  </section>
+
+  <!-- ── COMPARE ── -->
+  <section id="compare">
+    <div class="container">
+      <p class="section-label">Head to Head</p>
+      <h2 class="section-title">Feature Comparison</h2>
+      <p class="section-desc">Side-by-side breakdown of capabilities, pricing tier, and benchmark performance across the leading models.</p>
+      <div class="table-wrap fade-in">
+        <table id="compareTable"></table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TIMELINE ── -->
+  <section id="timeline">
+    <div class="container">
+      <p class="section-label">History in Motion</p>
+      <h2 class="section-title">Key Milestones</h2>
+      <p class="section-desc">The landmark releases and moments that shaped today's AI landscape.</p>
+      <div class="timeline" id="timelineEl"></div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="footer-title">Stay Ahead.</div>
+    <div class="footer-line"></div>
+    <p class="footer-sub">
+      AI is evolving faster than any technology in history.<br />
+      The models you see today will be surpassed within months.<br />
+      <span style="color:var(--gold);">The only edge is knowing what's coming.</span>
+    </p>
+    <p style="margin-top:24px; font-size:0.68rem; color:var(--muted); letter-spacing:0.1em;">BSN 2026 · AI INTELLIGENCE REPORT · MAY 2026</p>
+  </footer>
+
+  <script>
+  // ── DATA ──────────────────────────────────────────────────────────────────
+
+  const UPDATES = [
+    {
+      badge: 'hot', date: 'May 2026',
+      title: 'Claude Opus 4.7 sets new coding benchmark record',
+      body: 'Anthropic\'s latest flagship model scores 92.3% on SWE-bench Verified, the highest ever recorded. Handles full software projects end-to-end with extended thinking.',
+      company: 'Anthropic'
+    },
+    {
+      badge: 'major', date: 'Apr 2026',
+      title: 'Gemini 2.5 Ultra launches with 2M token context',
+      body: 'Google DeepMind doubles their context window to 2 million tokens — enough to process entire codebases, full-length novels, or hours of video simultaneously.',
+      company: 'Google DeepMind'
+    },
+    {
+      badge: 'new', date: 'Apr 2026',
+      title: 'Meta releases Llama 4 Maverick open-source',
+      body: 'Llama 4 Maverick (400B MoE) goes open-weights, outperforming GPT-4o on most benchmarks. A seismic shift making frontier-class AI freely available.',
+      company: 'Meta AI'
+    },
+    {
+      badge: 'hot', date: 'Mar 2026',
+      title: 'OpenAI o3 achieves AGI-level math performance',
+      body: 'o3 scores 96.7% on FrontierMath — a dataset experts estimated would take a decade to solve. Formal mathematical reasoning is now largely automated.',
+      company: 'OpenAI'
+    },
+    {
+      badge: 'new', date: 'Mar 2026',
+      title: 'Grok 3 Ultra integrates real-time X/internet access',
+      body: 'xAI\'s Grok 3 Ultra pulls live data from across the web, making it the most current AI assistant available. Aurora image generation also dramatically upgraded.',
+      company: 'xAI'
+    },
+    {
+      badge: 'major', date: 'Feb 2026',
+      title: 'DeepSeek V4 disrupts with $0.0001 per 1K token pricing',
+      body: 'Chinese startup DeepSeek releases V4, matching frontier performance at a fraction of the cost — triggering a global AI pricing war and GPU stock plunge.',
+      company: 'DeepSeek'
+    },
+    {
+      badge: 'new', date: 'Jan 2026',
+      title: 'Perplexity launches Sonar Pro reasoning search',
+      body: 'Perplexity\'s Sonar Pro combines deep web search with multi-step reasoning, delivering cited, real-time answers. The "research assistant" era begins.',
+      company: 'Perplexity AI'
+    },
+    {
+      badge: 'major', date: 'Dec 2025',
+      title: 'Mistral Large 3 matches GPT-4o in European deployment',
+      body: 'France\'s Mistral AI closes the gap with US labs. Mistral Large 3 runs on-premise at enterprise scale — a breakthrough for data sovereignty and GDPR compliance.',
+      company: 'Mistral AI'
+    },
+    {
+      badge: 'hot', date: 'Nov 2025',
+      title: 'Claude 3.7 Sonnet breaks 1M context with instant recall',
+      body: 'Anthropic\'s Sonnet achieves perfect recall across 1M tokens in benchmarks — ending the era where longer context meant degraded performance.',
+      company: 'Anthropic'
+    },
+  ];
+
+  const MODELS = [
+    {
+      icon: '🔮', name: 'Claude 4', maker: 'Anthropic', tier: 'frontier', tierLabel: 'Frontier',
+      accentColor: '#c9a96e',
+      desc: 'Anthropic\'s flagship series built for safety, reasoning, and code. Claude Opus 4.7 leads on software engineering benchmarks. Extended Thinking enables step-by-step reasoning for hard problems.',
+      specs: [
+        { label: 'Context', val: '200K tokens' },
+        { label: 'Best Model', val: 'Opus 4.7' },
+        { label: 'Released', val: '2025–2026' },
+        { label: 'Access', val: 'API + claude.ai' },
+      ],
+      features: ['Extended Thinking', 'Computer Use', 'Multi-Agent', 'Tool Use', 'Vision', 'Code Expert', 'Files API', 'Prompt Caching'],
+      scores: [
+        { label: 'Coding',    val: 95 },
+        { label: 'Reasoning', val: 92 },
+        { label: 'Writing',   val: 96 },
+        { label: 'Safety',    val: 98 },
+      ]
+    },
+    {
+      icon: '🧠', name: 'GPT-4o / o3', maker: 'OpenAI', tier: 'frontier', tierLabel: 'Frontier',
+      accentColor: '#10b981',
+      desc: 'OpenAI\'s dual-track approach: GPT-4o for fast, multimodal general intelligence; o3 for deliberate, step-by-step reasoning on complex math, science, and coding problems.',
+      specs: [
+        { label: 'Context', val: '128K tokens' },
+        { label: 'Best Model', val: 'o3' },
+        { label: 'Released', val: '2024–2025' },
+        { label: 'Access', val: 'API + ChatGPT' },
+      ],
+      features: ['Real-time Voice', 'Vision & Video', 'DALL-E 3', 'Memory', 'Browsing', 'o3 Reasoning', 'Code Interpreter', 'Function Calling'],
+      scores: [
+        { label: 'Coding',    val: 93 },
+        { label: 'Reasoning', val: 97 },
+        { label: 'Writing',   val: 91 },
+        { label: 'Safety',    val: 88 },
+      ]
+    },
+    {
+      icon: '💎', name: 'Gemini 2.5', maker: 'Google DeepMind', tier: 'frontier', tierLabel: 'Frontier',
+      accentColor: '#4dd9f0',
+      desc: 'Google\'s most capable model natively handles text, images, audio, and video. The 2M-token context window is unmatched. Deep Research automates multi-hour research tasks in minutes.',
+      specs: [
+        { label: 'Context', val: '2M tokens' },
+        { label: 'Best Model', val: 'Gemini 2.5 Ultra' },
+        { label: 'Released', val: '2025' },
+        { label: 'Access', val: 'API + Gemini app' },
+      ],
+      features: ['2M Token Context', 'Native Multimodal', 'Deep Research', 'Audio/Video', 'Google Search', 'Code Execution', 'Workspace Integration', 'Flash Speed Tier'],
+      scores: [
+        { label: 'Coding',    val: 90 },
+        { label: 'Reasoning', val: 93 },
+        { label: 'Writing',   val: 90 },
+        { label: 'Safety',    val: 91 },
+      ]
+    },
+    {
+      icon: '⚡', name: 'Grok 3', maker: 'xAI', tier: 'frontier', tierLabel: 'Frontier',
+      accentColor: '#a78bfa',
+      desc: 'Elon Musk\'s xAI model with real-time access to X (Twitter) and the open web. Grok 3 Ultra features DeepSearch for complex multi-step reasoning and Aurora for photorealistic image generation.',
+      specs: [
+        { label: 'Context', val: '128K tokens' },
+        { label: 'Best Model', val: 'Grok 3 Ultra' },
+        { label: 'Released', val: '2025' },
+        { label: 'Access', val: 'X Premium / API' },
+      ],
+      features: ['Real-time Web', 'X/Twitter Data', 'DeepSearch', 'Aurora Images', 'Voice Mode', 'Code Mode', 'Big Brain Mode', 'Fun Mode'],
+      scores: [
+        { label: 'Coding',    val: 88 },
+        { label: 'Reasoning', val: 90 },
+        { label: 'Writing',   val: 89 },
+        { label: 'Safety',    val: 82 },
+      ]
+    },
+    {
+      icon: '🦙', name: 'Llama 4', maker: 'Meta AI', tier: 'open', tierLabel: 'Open Source',
+      accentColor: '#34d399',
+      desc: 'Meta\'s game-changing open-weights model series. Maverick (400B MoE) rivals GPT-4o. Scout handles 10M token context. Behemoth (2T params) leads internal benchmarks. Free to run and fine-tune.',
+      specs: [
+        { label: 'Context', val: '10M tokens' },
+        { label: 'Best Model', val: 'Maverick 400B' },
+        { label: 'Released', val: '2025' },
+        { label: 'Access', val: 'Open Weights' },
+      ],
+      features: ['Open Weights', '10M Context', 'Multimodal', 'MoE Architecture', 'Fine-tunable', 'Self-hostable', 'Behemoth 2T', 'Scout 17B'],
+      scores: [
+        { label: 'Coding',    val: 87 },
+        { label: 'Reasoning', val: 86 },
+        { label: 'Writing',   val: 87 },
+        { label: 'Safety',    val: 84 },
+      ]
+    },
+    {
+      icon: '🌊', name: 'DeepSeek V3/R1', maker: 'DeepSeek', tier: 'open', tierLabel: 'Open Source',
+      accentColor: '#60a5fa',
+      desc: 'China\'s AI breakthrough that shocked the world. DeepSeek R1 matched o1 on reasoning at 95% lower training cost. Open weights, MIT license, and aggressively priced API access.',
+      specs: [
+        { label: 'Context', val: '128K tokens' },
+        { label: 'Best Model', val: 'V3 / R1' },
+        { label: 'Released', val: '2024–2025' },
+        { label: 'Access', val: 'Open Weights' },
+      ],
+      features: ['Open Weights', 'MIT License', 'Reasoning (R1)', 'Ultra-Low Cost', 'MoE 671B', 'Strong Math', 'Code Excellence', 'Self-hostable'],
+      scores: [
+        { label: 'Coding',    val: 89 },
+        { label: 'Reasoning', val: 91 },
+        { label: 'Writing',   val: 82 },
+        { label: 'Safety',    val: 75 },
+      ]
+    },
+    {
+      icon: '🇪🇺', name: 'Mistral Large 3', maker: 'Mistral AI', tier: 'frontier', tierLabel: 'Frontier',
+      accentColor: '#f59e0b',
+      desc: 'Europe\'s most capable AI model built with GDPR compliance and enterprise privacy as core values. Codestral specializes in code generation. On-premise deployment for data sovereignty.',
+      specs: [
+        { label: 'Context', val: '128K tokens' },
+        { label: 'Best Model', val: 'Large 3' },
+        { label: 'Released', val: '2025' },
+        { label: 'Access', val: 'API + On-prem' },
+      ],
+      features: ['GDPR Native', 'On-Premise', 'Codestral', 'European Hosted', 'Function Calling', 'JSON Mode', 'Open Variants', 'Enterprise SLA'],
+      scores: [
+        { label: 'Coding',    val: 86 },
+        { label: 'Reasoning', val: 84 },
+        { label: 'Writing',   val: 88 },
+        { label: 'Safety',    val: 90 },
+      ]
+    },
+    {
+      icon: '🔍', name: 'Perplexity Sonar', maker: 'Perplexity AI', tier: 'search', tierLabel: 'Search AI',
+      accentColor: '#e879f9',
+      desc: 'The AI-native search engine that answers questions with live web data and citations. Sonar Pro adds multi-step reasoning. Used by millions for research, fact-checking, and real-time intelligence.',
+      specs: [
+        { label: 'Context', val: '128K tokens' },
+        { label: 'Best Model', val: 'Sonar Pro' },
+        { label: 'Released', val: '2024–2025' },
+        { label: 'Access', val: 'App + API' },
+      ],
+      features: ['Real-time Web', 'Citations', 'Multi-step Search', 'Pro Reasoning', 'Spaces', 'Focus Modes', 'API Access', 'Mobile App'],
+      scores: [
+        { label: 'Recency',   val: 99 },
+        { label: 'Reasoning', val: 84 },
+        { label: 'Writing',   val: 83 },
+        { label: 'Citations', val: 97 },
+      ]
+    },
+  ];
+
+  const COMPARE_DATA = [
+    { model: 'Claude 4 Opus', company: 'Anthropic', context: '200K', open: false, vision: true, voice: false, search: false, reasoning: true, price: '$$', bench: '95.2', tier: 'high' },
+    { model: 'GPT-4o', company: 'OpenAI', context: '128K', open: false, vision: true, voice: true, search: true, reasoning: false, price: '$$', bench: '88.7', tier: 'high' },
+    { model: 'o3', company: 'OpenAI', context: '128K', open: false, vision: true, voice: false, search: false, reasoning: true, price: '$$$', bench: '96.7', tier: 'high' },
+    { model: 'Gemini 2.5 Pro', company: 'Google', context: '1M', open: false, vision: true, voice: true, search: true, reasoning: true, price: '$$', bench: '91.3', tier: 'high' },
+    { model: 'Grok 3 Ultra', company: 'xAI', context: '128K', open: false, vision: true, voice: true, search: true, reasoning: true, price: '$$', bench: '89.4', tier: 'high' },
+    { model: 'Llama 4 Maverick', company: 'Meta', context: '10M', open: true, vision: true, voice: false, search: false, reasoning: false, price: 'Free', bench: '85.6', tier: 'mid' },
+    { model: 'DeepSeek R1', company: 'DeepSeek', context: '128K', open: true, vision: false, voice: false, search: false, reasoning: true, price: '$', bench: '90.8', tier: 'high' },
+    { model: 'Mistral Large 3', company: 'Mistral', context: '128K', open: false, vision: false, voice: false, search: false, reasoning: false, price: '$$', bench: '81.2', tier: 'mid' },
+    { model: 'Perplexity Sonar', company: 'Perplexity', context: '128K', open: false, vision: false, voice: false, search: true, reasoning: true, price: '$', bench: 'N/A', tier: 'mid' },
+  ];
+
+  const TIMELINE = [
+    { date: 'May 2026', title: 'Claude Opus 4.7 — Record SWE-bench Score', body: 'Anthropic\'s Opus 4.7 achieves 92.3% on SWE-bench Verified, the highest score ever recorded for autonomous software engineering. AI agents now handle full production codebases.', company: 'Anthropic', color: '#c9a96e' },
+    { date: 'April 2026', title: 'Gemini 2.5 Ultra — 2M Token Context', body: 'Google doubles the context window to 2 million tokens. An entire software company\'s codebase fits in a single prompt. Long-context retrieval operates at near-perfect accuracy.', company: 'Google DeepMind', color: '#4dd9f0' },
+    { date: 'April 2026', title: 'Llama 4 Maverick — Open-Source Frontier', body: 'Meta releases Llama 4 Maverick (400B parameters, MoE architecture) as open weights under a permissive license — outperforming GPT-4o on most tasks for zero cost.', company: 'Meta AI', color: '#34d399' },
+    { date: 'March 2026', title: 'o3 — Near-Perfect Mathematical Reasoning', body: 'OpenAI\'s o3 achieves 96.7% on FrontierMath, a dataset created specifically because GPT-4 scored <2%. Formal mathematics is effectively solved by AI.', company: 'OpenAI', color: '#10b981' },
+    { date: 'Feb 2026', title: 'DeepSeek V4 — The $0.0001 Disruption', body: 'DeepSeek\'s V4 releases with frontier-level performance at pricing that undercuts Western competitors by 100×. Triggered a global reevaluation of AI infrastructure costs.', company: 'DeepSeek', color: '#60a5fa' },
+    { date: 'Jan 2026', title: 'Grok 3 — Real-Time Intelligence', body: 'xAI launches Grok 3 with live web access, dramatically improved reasoning, and Aurora image generation. Integrated with X (Twitter) for real-time social intelligence.', company: 'xAI', color: '#a78bfa' },
+    { date: 'Nov 2025', title: 'Claude 3.7 Sonnet — 1M Perfect Recall', body: 'Anthropic demonstrates perfect recall at 1 million tokens, ending the long-context degradation problem that has plagued AI for years.', company: 'Anthropic', color: '#c9a96e' },
+    { date: 'Sep 2025', title: 'OpenAI o1 — Public Reasoning AI', body: 'o1 launches publicly with chain-of-thought reasoning, solving PhD-level science problems. A new paradigm of "thinking" AI models begins.', company: 'OpenAI', color: '#10b981' },
+    { date: 'May 2024', title: 'GPT-4o — Real-time Multimodal AI', body: 'GPT-4o launches with native voice, vision, and text — processing all modalities simultaneously. Live voice conversations with AI become a reality for consumers.', company: 'OpenAI', color: '#10b981' },
+    { date: 'Mar 2024', title: 'Claude 3 Opus — New Intelligence Benchmark', body: 'Claude 3 Opus becomes the first model to beat GPT-4 across all major benchmarks. Anthropic proves that safety and capability are not at odds.', company: 'Anthropic', color: '#c9a96e' },
+  ];
+
+  const TICKER_ITEMS = [
+    { tag: 'LIVE', text: 'Claude Opus 4.7 sets SWE-bench world record at 92.3%' },
+    { tag: 'HOT', text: 'Gemini 2.5 Ultra — 2 million token context officially live' },
+    { tag: 'NEW', text: 'Llama 4 Maverick open-weights release surpasses GPT-4o benchmarks' },
+    { tag: 'LIVE', text: 'o3 achieves 96.7% on FrontierMath — mathematical AI milestone' },
+    { tag: 'HOT', text: 'DeepSeek V4 pricing triggers global AI cost war' },
+    { tag: 'NEW', text: 'Grok 3 Ultra — live web access + DeepSearch now available' },
+    { tag: 'LIVE', text: 'Perplexity Sonar Pro: cited research answers in under 3 seconds' },
+    { tag: 'HOT', text: 'Mistral Large 3 closes gap with US models for European enterprise' },
+  ];
+
+  // ── RENDER TICKER ────────────────────────────────────────────────────────
+
+  function renderTicker() {
+    const track = document.getElementById('tickerTrack');
+    const doubled = [...TICKER_ITEMS, ...TICKER_ITEMS]; // seamless loop
+    track.innerHTML = doubled.map(item => `
+      <span class="ticker-item">
+        <span class="tag">[${item.tag}]</span>
+        <span class="dot">◆</span>
+        ${item.text}
+      </span>
+    `).join('');
+  }
+
+  // ── RENDER UPDATES ───────────────────────────────────────────────────────
+
+  function renderUpdates() {
+    const grid = document.getElementById('updatesGrid');
+    grid.innerHTML = UPDATES.map((u, i) => `
+      <div class="update-card fade-in" style="transition-delay:${i * 0.05}s">
+        <div class="update-card-top">
+          <span class="update-badge ${u.badge}">${u.badge === 'hot' ? '🔥 Hot' : u.badge === 'major' ? '⚡ Major' : '✦ New'}</span>
+          <span class="update-date">${u.date}</span>
+        </div>
+        <div class="update-title">${u.title}</div>
+        <div class="update-body">${u.body}</div>
+        <div class="update-company">${u.company}</div>
+      </div>
+    `).join('');
+  }
+
+  // ── SCORE COLOR ──────────────────────────────────────────────────────────
+
+  function scoreColor(val) {
+    if (val >= 90) return 'linear-gradient(90deg, #34d399, #10b981)';
+    if (val >= 80) return 'linear-gradient(90deg, #c9a96e, #e8cc99)';
+    return 'linear-gradient(90deg, #f87171, #fb923c)';
+  }
+
+  // ── RENDER MODELS ────────────────────────────────────────────────────────
+
+  function renderModels() {
+    const grid = document.getElementById('modelsGrid');
+    grid.innerHTML = MODELS.map((m, i) => `
+      <div class="model-card fade-in" style="transition-delay:${i * 0.07}s">
+        <div class="model-card-header">
+          <div class="model-icon" style="background:${m.accentColor}18; border:1px solid ${m.accentColor}30;">${m.icon}</div>
+          <div>
+            <div class="model-name">${m.name}</div>
+            <div class="model-maker">${m.maker}</div>
+          </div>
+          <div class="model-tier tier-${m.tier}">${m.tierLabel}</div>
+        </div>
+        <div class="model-card-body">
+          <p class="model-desc">${m.desc}</p>
+
+          <div class="model-specs">
+            ${m.specs.map(s => `
+              <div class="spec">
+                <div class="spec-label">${s.label}</div>
+                <div class="spec-val">${s.val}</div>
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="model-features">
+            ${m.features.map(f => `<span class="feat-tag">${f}</span>`).join('')}
+          </div>
+
+          <div class="model-score-bar">
+            ${m.scores.map(s => `
+              <div class="score-row">
+                <span class="score-label">${s.label}</span>
+                <div class="score-track">
+                  <div class="score-fill" style="width:0%; background:${scoreColor(s.val)};" data-val="${s.val}"></div>
+                </div>
+                <span class="score-num">${s.val}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ── RENDER TABLE ─────────────────────────────────────────────────────────
+
+  function renderTable() {
+    const table = document.getElementById('compareTable');
+    const ch = (val) => val
+      ? `<span class="td-check">✓</span>`
+      : `<span class="td-dash">—</span>`;
+
+    const benchClass = (b) => {
+      if (b === 'N/A') return 'td-score score-mid';
+      const n = parseFloat(b);
+      return n >= 90 ? 'td-score score-high' : n >= 80 ? 'td-score score-mid' : 'td-score score-low';
+    };
+
+    table.innerHTML = `
+      <thead>
+        <tr>
+          <th>Model</th>
+          <th>Context</th>
+          <th>Open</th>
+          <th>Vision</th>
+          <th>Voice</th>
+          <th>Search</th>
+          <th>Reasoning</th>
+          <th>Price</th>
+          <th>Benchmark</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${COMPARE_DATA.map(r => `
+          <tr>
+            <td>
+              <div class="td-model">${r.model}</div>
+              <div class="td-company">${r.company}</div>
+            </td>
+            <td style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--gold)">${r.context}</td>
+            <td>${ch(r.open)}</td>
+            <td>${ch(r.vision)}</td>
+            <td>${ch(r.voice)}</td>
+            <td>${ch(r.search)}</td>
+            <td>${ch(r.reasoning)}</td>
+            <td style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--muted)">${r.price}</td>
+            <td class="${benchClass(r.bench)}">${r.bench}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    `;
+  }
+
+  // ── RENDER TIMELINE ──────────────────────────────────────────────────────
+
+  function renderTimeline() {
+    const el = document.getElementById('timelineEl');
+    el.innerHTML = TIMELINE.map((t, i) => `
+      <div class="tl-item fade-in" style="transition-delay:${i * 0.06}s">
+        <div class="tl-date">${t.date}</div>
+        <div class="tl-title">${t.title}</div>
+        <div class="tl-body">${t.body}</div>
+        <span class="tl-company" style="background:${t.color}15;color:${t.color};border:1px solid ${t.color}30;">${t.company}</span>
+      </div>
+    `).join('');
+  }
+
+  // ── INTERSECTION OBSERVER (fade + score bars) ────────────────────────────
+
+  function initObserver() {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          // animate score bars
+          entry.target.querySelectorAll('.score-fill').forEach(bar => {
+            bar.style.width = bar.dataset.val + '%';
+          });
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+  }
+
+  // ── NAV ACTIVE STATE ─────────────────────────────────────────────────────
+
+  function initNav() {
+    const btns = document.querySelectorAll('.nav-btn');
+    const sections = ['updates', 'models', 'compare', 'timeline'];
+
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.getElementById(btn.dataset.target).scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    const sectionIO = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          btns.forEach(b => b.classList.remove('active'));
+          const btn = document.querySelector(`.nav-btn[data-target="${e.target.id}"]`);
+          if (btn) btn.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-30% 0px -60% 0px' });
+
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) sectionIO.observe(el);
+    });
+  }
+
+  // ── INIT ─────────────────────────────────────────────────────────────────
+
+  document.addEventListener('DOMContentLoaded', () => {
+    renderTicker();
+    renderUpdates();
+    renderModels();
+    renderTable();
+    renderTimeline();
+    // small delay so DOM is painted before observer fires
+    requestAnimationFrame(() => requestAnimationFrame(initObserver));
+    initNav();
+  });
+  </script>
+</body>
+</html>
